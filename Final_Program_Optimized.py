@@ -1,10 +1,43 @@
 #Unfinished
 import pymysql
 from tkinter import *
-from tkinter import ttk
-from tkinter import messagebox
+from tkinter import ttk, simpledialog, messagebox
 import tkinter as tk
 
+
+def check_password(root):
+    correct_password = "1234"
+    password_window = Toplevel(root)
+    password_window.title("PIN Verification")
+    password_window.geometry("300x150")
+    password_window.configure(bg="#ADD8E6")  # Set the background color
+
+    passwordLabel = tk.Label(password_window, text="Enter Password:", font=('Ink Free', 20), bg="#ADD8E6")
+    passwordLabel.pack(pady=10)
+
+    passwordEntry = tk.Entry(password_window, width=20, font=('Arial', 15), show="*")
+    passwordEntry.pack(pady=10)
+
+    passwordBtn = tk.Button(password_window, text="Enter", font=('Arial', 15), command=lambda: validate_password(password_window, passwordEntry.get()))
+    passwordBtn.pack(pady=10)
+
+def validate_password(password_window, entered_password):
+    correct_password = "1234"
+
+    if entered_password == correct_password:
+        messagebox.showinfo("Correct Password", "Access granted. Opening inventory.")
+        password_window.destroy()
+        root.deiconify()  # Show the main student registration system window
+    else:
+        messagebox.showerror("Incorrect Password", "Incorrect Password. Exiting...")
+        password_window.destroy()  # Close the password entry window
+        root.destroy()  # Close the entire application
+
+root = Tk()
+root.configure(bg="#ADD8E6")
+root.withdraw()
+# Call the check_pin function with the root window
+check_password(root)
 
 def connection():
     conn = pymysql.connect(
@@ -21,13 +54,13 @@ def refreshTable():
         my_tree.delete(data)
 
     for array in read():
-        
         my_tree.insert(parent='', index='end', iid=array, text="", values=(array), tag="orow")
 
     my_tree.tag_configure('orow', background='#EEEEEE', font=('Arial', 12))
     my_tree.grid(row=8, column=0, columnspan=5, rowspan=11, padx=10, pady=20)
     
-root = Tk()
+
+
 root.configure(bg="#ADD8E6")
 root.title("Student Registration System")
 root.geometry("1080x720")
@@ -39,7 +72,6 @@ ph2 = tk.StringVar()
 ph3 = tk.StringVar()
 ph4 = tk.StringVar()
 ph5 = tk.StringVar()
-
 
 def setph(word, num):
     if num == 1:
@@ -240,32 +272,32 @@ lnameEntry.grid(row=5, column=1, columnspan=4, padx=5, pady=0)
 addressEntry.grid(row=6, column=1, columnspan=4, padx=5, pady=0)
 phoneEntry.grid(row=7, column=1, columnspan=4, padx=5, pady=0)
 
-
 addBtn = Button(
-    root, text="Add", padx=65, pady=25, width=10,
+    root, text="Add", padx=20, pady=10, width=8,
     bd=5, font=('Arial', 15), bg="#919cf2", command=add)
 updateBtn = Button(
-    root, text="Update", padx=65, pady=25, width=10,
+    root, text="Update", padx=20, pady=10, width=8,
     bd=5, font=('Arial', 15), bg="#6ba8b2", command=update)
 deleteBtn = Button(
-    root, text="Delete", padx=65, pady=25, width=10,
+    root, text="Delete", padx=20, pady=10, width=8,
     bd=5, font=('Arial', 15), bg="#f017ff", command=delete)
 searchBtn = Button(
-    root, text="Search", padx=65, pady=25, width=10,
+    root, text="Search", padx=20, pady=10, width=8,
     bd=5, font=('Arial', 15), bg="#f59947", command=search)
 resetBtn = Button(
-    root, text="Reset", padx=65, pady=25, width=10,
+    root, text="Reset", padx=20, pady=10, width=8,
     bd=5, font=('Arial', 15), bg="#45d1ff", command=reset)
 selectBtn = Button(
-    root, text="Select", padx=65, pady=25, width=10,
+    root, text="Select", padx=20, pady=10, width=8,
     bd=5, font=('Arial', 15), bg="#9dca62", command=select)
 
-addBtn.grid(row=3, column=5, columnspan=1, rowspan=2)
-updateBtn.grid(row=5, column=5, columnspan=1, rowspan=2)
-deleteBtn.grid(row=7, column=5, columnspan=1, rowspan=2)
-searchBtn.grid(row=9, column=5, columnspan=1, rowspan=2)
-resetBtn.grid(row=11, column=5, columnspan=1, rowspan=2)
-selectBtn.grid(row=13, column=5, columnspan=1, rowspan=2)
+addBtn.grid(row=3, column=5, padx=(0, 5), pady=(0, 5))  # Adjusted pady for Add button
+updateBtn.grid(row=4, column=5, padx=(0, 5), pady=(0, 5))  # Adjusted pady for Update button
+deleteBtn.grid(row=5, column=5, padx=(0, 5), pady=(0, 5))
+searchBtn.grid(row=6, column=5, padx=(0, 5), pady=(0, 5))
+resetBtn.grid(row=7, column=5, padx=(0, 5), pady=(0, 5))
+selectBtn.grid(row=8, column=5, padx=(0, 5), pady=(0, 4))
+  # Adjusted pady for Select button
 
 style = ttk.Style()
 style.configure("Treeview.Heading", font=('Arial Bold', 15))
@@ -273,17 +305,17 @@ style.configure("Treeview.Heading", font=('Arial Bold', 15))
 my_tree['columns'] = ("Stud ID", "Firstname", "Lastname", "Address", "Phone No.")
 
 my_tree.column("#0", width=0, stretch=NO)
-my_tree.column("Stud ID", anchor=E, width=170)
-my_tree.column("Firstname", anchor=E, width=150)
-my_tree.column("Lastname", anchor=E, width=150)
-my_tree.column("Address", anchor=E, width=165)
-my_tree.column("Phone No.", anchor=E, width=150)
+my_tree.column("Stud ID", anchor=W, width=170)
+my_tree.column("Firstname", anchor=W, width=150)
+my_tree.column("Lastname", anchor=W, width=150)
+my_tree.column("Address", anchor=W, width=165)
+my_tree.column("Phone No.", anchor=W, width=150)
 
-my_tree.heading("Stud ID", text="Student ID", anchor=E)
-my_tree.heading("Firstname", text="Firstname", anchor=E)
-my_tree.heading("Lastname", text="Lastname", anchor=E)
-my_tree.heading("Address", text="Address", anchor=E)
-my_tree.heading("Phone No.", text="Phone", anchor=E)
+my_tree.heading("Stud ID", text="Student ID", anchor=W)
+my_tree.heading("Firstname", text="Firstname", anchor=W)
+my_tree.heading("Lastname", text="Lastname", anchor=W)
+my_tree.heading("Address", text="Address", anchor=W)
+my_tree.heading("Phone No.", text="Phone", anchor=W)
 
 refreshTable()
 
